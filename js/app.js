@@ -4,6 +4,10 @@ import "./form.js";
 import "./search.js";
 import "./theme.js";
 
-const users = loadUsers();
-renderUsers(users);
+loadUsers();
+renderUsers();
 
+logoLink.onclick = e => {
+  e.preventDefault();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
