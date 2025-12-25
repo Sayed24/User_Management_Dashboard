@@ -1,20 +1,9 @@
-export const demoUsers = [
-  {
-    id: 1,
-    firstName: "John",
-    lastName: "Doe",
-    email: "john@example.com",
-    phone: "123456",
-    city: "New York",
-    image: "https://i.pravatar.cc/300?img=1"
-  },
-  {
-    id: 2,
-    firstName: "Sarah",
-    lastName: "Khan",
-    email: "sarah@example.com",
-    phone: "555888",
-    city: "London",
-    image: "https://i.pravatar.cc/300?img=2"
-  }
-];
+export const demoUsers = Array.from({ length: 14 }, (_, i) => ({
+  id: i + 1,
+  firstName: "User",
+  lastName: i + 1,
+  email: `user${i+1}@demo.com`,
+  phone: "000000",
+  city: "Demo City",
+  image: `https://i.pravatar.cc/300?img=${i+1}`
+}));
