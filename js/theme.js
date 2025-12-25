@@ -1,14 +1,11 @@
-const toggleBtn = document.getElementById("themeToggle");
 const root = document.documentElement;
+const btn = document.getElementById("themeToggle");
 
-const savedTheme = localStorage.getItem("theme");
-if (savedTheme) root.setAttribute("data-theme", savedTheme);
+const saved = localStorage.getItem("theme") || "light";
+root.setAttribute("data-theme", saved);
 
-toggleBtn.addEventListener("click", () => {
-  const current = root.getAttribute("data-theme");
-  const next = current === "dark" ? "light" : "dark";
-
+btn.onclick = () => {
+  const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
   root.setAttribute("data-theme", next);
   localStorage.setItem("theme", next);
-});
-
+};
