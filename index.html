@@ -14,41 +14,49 @@
   </h1>
 
   <div class="header-actions">
-    <input type="text" id="searchInput" placeholder="Search users..." />
+    <input id="searchInput" placeholder="Search users..." />
     <button id="themeToggle">🌙</button>
+    <button id="logoutBtn">Logout</button>
   </div>
 </header>
 
 <main class="container">
 
-  <!-- ADD USER FORM -->
-  <section class="card">
+  <!-- LOGIN MOCK -->
+  <section id="loginSection" class="card">
+    <h2>Login</h2>
+    <select id="roleSelect">
+      <option value="admin">Admin</option>
+      <option value="user">User</option>
+    </select>
+    <button id="loginBtn">Login</button>
+  </section>
+
+  <!-- ADD USER -->
+  <section id="formSection" class="card hidden">
     <h2>Add User</h2>
 
     <form id="userForm" novalidate>
-      <div class="grid">
+      <div class="grid uniform">
         <div>
           <input id="firstName" placeholder="First Name" />
           <small class="error" id="errFirstName"></small>
         </div>
-
         <div>
           <input id="lastName" placeholder="Last Name" />
           <small class="error" id="errLastName"></small>
         </div>
-
         <div>
           <input id="email" placeholder="Email" />
           <small class="error" id="errEmail"></small>
         </div>
-
         <input id="phone" placeholder="Phone" />
         <input id="city" placeholder="City" />
         <input id="image" placeholder="Image URL" />
       </div>
 
       <div class="image-preview">
-        <img id="previewImage" alt="Preview">
+        <img id="previewImage">
       </div>
 
       <button type="submit">Add User</button>
@@ -57,6 +65,7 @@
 
   <!-- USERS -->
   <section id="usersGrid" class="users-grid"></section>
+  <div id="pagination" class="pagination"></div>
 
 </main>
 
@@ -64,14 +73,12 @@
 <div id="editModal" class="modal hidden">
   <div class="modal-content">
     <h3>Edit User</h3>
-
     <input id="editFirstName" />
     <input id="editLastName" />
     <input id="editEmail" />
     <input id="editPhone" />
     <input id="editCity" />
     <input id="editImage" />
-
     <div class="modal-actions">
       <button id="saveEdit">Save</button>
       <button id="cancelEdit">Cancel</button>
