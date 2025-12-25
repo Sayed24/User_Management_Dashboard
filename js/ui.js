@@ -1,66 +1,53 @@
-import { users } from "./state.js";
+import { users, PER_PAGE } from "./state.js";
 import { saveUsers } from "./storage.js";
+import { renderPagination } from "./pagination.js";
 
-const grid = document.getElementById("usersGrid");
-const modal = document.getElementById("editModal");
+export function renderUsers() {
+  usersGrid.innerHTML = "";
+  const start = (window.currentPage-1)*PER_PAGE;
+  const slice = users.slice(start,start+PER_PAGE);
 
-export function renderUsers(list = users) {
-  grid.innerHTML = "";
-
-  list.forEach(user => {
+  slice.forEach(user => {
     const card = document.createElement("div");
     card.className = "user-card";
-
     card.innerHTML = `
-      <img src="${user.image || "https://i.pravatar.cc/300"}">
+      <img src="${user.image}">
       <h4>${user.firstName} ${user.lastName}</h4>
       <p>${user.email}</p>
-      <p>${user.city}</p>
       <div class="user-actions">
         <button class="edit">Edit</button>
         <button class="delete">Delete</button>
       </div>
     `;
-
-    card.querySelector(".delete").onclick = () => {
-      users.splice(users.findIndex(u => u.id === user.id), 1);
-      saveUsers();
-      renderUsers();
+    card.querySelector(".delete").onclick=()=>{
+      users.splice(users.indexOf(user),1);
+      saveUsers(); renderUsers();
     };
-
-    card.querySelector(".edit").onclick = () => openEdit(user);
-
-    grid.appendChild(card);
+    card.querySelector(".edit").onclick=()=>{
+      editModal.classList.remove("hidden");
+      window.editUser = user;
+      editFirstName.value=user.firstName;
+      editLastName.value=user.lastName;
+      editEmail.value=user.email;
+      editPhone.value=user.phone;
+      editCity.value=user.city;
+      editImage.value=user.image;
+    };
+    usersGrid.appendChild(card);
   });
+  renderPagination();
 }
 
-function openEdit(user) {
-  modal.classList.remove("hidden");
-  window.currentEditId = user.id;
-
-  editFirstName.value = user.firstName;
-  editLastName.value = user.lastName;
-  editEmail.value = user.email;
-  editPhone.value = user.phone;
-  editCity.value = user.city;
-  editImage.value = user.image;
-}
-
-saveEdit.onclick = () => {
-  const user = users.find(u => u.id === window.currentEditId);
-
-  Object.assign(user, {
-    firstName: editFirstName.value,
-    lastName: editLastName.value,
-    email: editEmail.value,
-    phone: editPhone.value,
-    city: editCity.value,
-    image: editImage.value
+saveEdit.onclick=()=>{
+  Object.assign(window.editUser,{
+    firstName:editFirstName.value,
+    lastName:editLastName.value,
+    email:editEmail.value,
+    phone:editPhone.value,
+    city:editCity.value,
+    image:editImage.value
   });
-
-  saveUsers();
-  modal.classList.add("hidden");
-  renderUsers();
+  saveUsers(); editModal.classList.add("hidden"); renderUsers();
 };
 
-cancelEdit.onclick = () => modal.classList.add("hidden");
+cancelEdit.onclick=()=>editModal.classList.add("hidden");
