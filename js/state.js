@@ -1,2 +1,4 @@
 export let users = [];
-export let editingUserId = null;
+export let currentPage = 1;
+export const PER_PAGE = 6;
+export let role = null;
