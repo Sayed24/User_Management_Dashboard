@@ -6,8 +6,3 @@ import "./theme.js";
 
 loadUsers();
 renderUsers();
-
-logoLink.onclick = e => {
-  e.preventDefault();
-  window.scrollTo({top:0,behavior:"smooth"});
-};
