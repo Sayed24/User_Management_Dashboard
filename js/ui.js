@@ -1,68 +1,67 @@
 import { users, filteredUsers } from "./state.js";
 import { saveUsers } from "./storage.js";
-import { enableDrag } from "./drag.js";
 import { renderChart } from "./charts.js";
 
 const grid = document.getElementById("usersGrid");
 
-export function renderUsers() {
+export function renderUsers(){
   const data = filteredUsers || users;
   grid.innerHTML = "";
 
-  data.forEach(user => {
+  data.forEach(u=>{
     const card = document.createElement("div");
-    card.className = "user-card";
-
-    card.innerHTML = `
-      <img src="${user.image}">
-      <h4>${user.firstName} ${user.lastName}</h4>
-      <p>${user.email}</p>
-      <p>${user.city}</p>
-      <div class="user-actions">
-        <button class="edit">Edit</button>
-        <button class="delete">Delete</button>
+    card.className="user-card";
+    card.innerHTML=`
+      <img src="${u.image}">
+      <h4>${u.firstName} ${u.lastName}</h4>
+      <p>${u.email}</p>
+      <p>${u.city}</p>
+      <div class="actions">
+        <button onclick="editUser(${u.id})">Edit</button>
+        <button onclick="deleteUser(${u.id})">Delete</button>
       </div>
     `;
-
-    card.querySelector(".delete").onclick = () => {
-      users.splice(users.indexOf(user),1);
-      saveUsers();
-      renderUsers();
-    };
-
-    card.querySelector(".edit").onclick = () => openEdit(user);
-
     grid.appendChild(card);
   });
 
-  enableDrag(grid);
+  document.getElementById("totalUsers").textContent = users.length;
+  document.getElementById("totalCities").textContent =
+    new Set(users.map(u=>u.city)).size;
+
   renderChart();
 }
 
-function openEdit(user) {
+window.deleteUser = id=>{
+  const i = users.findIndex(u=>u.id===id);
+  users.splice(i,1);
+  saveUsers();
+  renderUsers();
+};
+
+window.editUser = id=>{
+  const u = users.find(x=>x.id===id);
   editModal.classList.remove("hidden");
-  window.editingUser = user;
+  window.current = u;
+  editFirstName.value=u.firstName;
+  editLastName.value=u.lastName;
+  editEmail.value=u.email;
+  editPhone.value=u.phone;
+  editCity.value=u.city;
+  editImage.value=u.image;
+};
 
-  editFirstName.value = user.firstName;
-  editLastName.value = user.lastName;
-  editEmail.value = user.email;
-  editPhone.value = user.phone;
-  editCity.value = user.city;
-  editImage.value = user.image;
-}
-
-saveEdit.onclick = () => {
-  Object.assign(window.editingUser,{
-    firstName: editFirstName.value,
-    lastName: editLastName.value,
-    email: editEmail.value,
-    phone: editPhone.value,
-    city: editCity.value,
-    image: editImage.value
+saveEdit.onclick=()=>{
+  Object.assign(window.current,{
+    firstName:editFirstName.value,
+    lastName:editLastName.value,
+    email:editEmail.value,
+    phone:editPhone.value,
+    city:editCity.value,
+    image:editImage.value
   });
   saveUsers();
   editModal.classList.add("hidden");
   renderUsers();
 };
 
-cancelEdit.onclick = () => editModal.classList.add("hidden");
+cancelEdit.onclick=()=>editModal.classList.add("hidden");
