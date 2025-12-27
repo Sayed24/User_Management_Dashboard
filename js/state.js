@@ -1,2 +1,5 @@
 export let users = [];
-export let filteredUsers = null;
+
+export function setUsers(data) {
+  users = data;
+}
