@@ -1,78 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>User Management Dashboard</title>
-  <link rel="stylesheet" href="css/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>User Management Dashboard</title>
+<link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<header class="header">
-  <h1 class="logo">
-    <a href="#" id="logoLink">User Dashboard</a>
-  </h1>
+<header class="topbar">
+  <div class="topbar-left">
+    <h1 class="logo">Dashboard</h1>
+  </div>
 
-  <div class="header-actions">
-    <input id="searchInput" placeholder="Search users..." />
+  <div class="topbar-right">
+    <input type="text" id="searchInput" placeholder="Search users...">
     <button id="themeToggle">🌙</button>
   </div>
 </header>
 
-<main class="container">
+<main class="dashboard">
+
+  <!-- STATS -->
+  <section class="stats">
+    <div class="stat-card">
+      <h3>Total Users</h3>
+      <p id="totalUsers">0</p>
+    </div>
+    <div class="stat-card">
+      <h3>Cities</h3>
+      <p id="totalCities">0</p>
+    </div>
+    <div class="stat-card">
+      <h3>Active</h3>
+      <p>100%</p>
+    </div>
+  </section>
 
   <!-- CHART -->
   <section class="card">
-    <h2>User Analytics</h2>
-    <canvas id="usersChart" height="140"></canvas>
+    <h2>User Distribution</h2>
+    <canvas id="usersChart" height="150"></canvas>
   </section>
 
   <!-- FORM -->
   <section class="card">
-    <h2>Add User</h2>
-
-    <form id="userForm" novalidate>
-      <div class="grid">
-        <div>
-          <input id="firstName" placeholder="First Name" />
-          <small id="errFirstName" class="error"></small>
-        </div>
-        <div>
-          <input id="lastName" placeholder="Last Name" />
-          <small id="errLastName" class="error"></small>
-        </div>
-        <div>
-          <input id="email" placeholder="Email" />
-          <small id="errEmail" class="error"></small>
-        </div>
-        <input id="phone" placeholder="Phone" />
-        <input id="city" placeholder="City" />
-        <input id="image" placeholder="Image URL" />
+    <h2>Add New User</h2>
+    <form id="userForm">
+      <div class="form-grid">
+        <input id="firstName" placeholder="First Name">
+        <input id="lastName" placeholder="Last Name">
+        <input id="email" placeholder="Email">
+        <input id="phone" placeholder="Phone">
+        <input id="city" placeholder="City">
+        <input id="image" placeholder="Image URL">
       </div>
-
-      <div class="image-preview">
-        <img id="previewImage" />
-      </div>
-
+      <img id="previewImage" class="preview">
       <button type="submit">Add User</button>
     </form>
   </section>
 
   <!-- USERS -->
-  <section id="usersGrid" class="users-grid"></section>
+  <section class="card">
+    <h2>Users</h2>
+    <div id="usersGrid" class="users-grid"></div>
+  </section>
+
 </main>
 
-<!-- EDIT MODAL -->
+<!-- MODAL -->
 <div id="editModal" class="modal hidden">
-  <div class="modal-content">
+  <div class="modal-box">
     <h3>Edit User</h3>
-    <input id="editFirstName" />
-    <input id="editLastName" />
-    <input id="editEmail" />
-    <input id="editPhone" />
-    <input id="editCity" />
-    <input id="editImage" />
-
+    <input id="editFirstName">
+    <input id="editLastName">
+    <input id="editEmail">
+    <input id="editPhone">
+    <input id="editCity">
+    <input id="editImage">
     <div class="modal-actions">
       <button id="saveEdit">Save</button>
       <button id="cancelEdit">Cancel</button>
