@@ -1,7 +1,9 @@
-const root=document.documentElement;
-themeToggle.onclick=()=>{
-  const t=root.getAttribute("data-theme")==="dark"?"light":"dark";
-  root.setAttribute("data-theme",t);
-  localStorage.setItem("theme",t);
+const root = document.documentElement;
+const saved = localStorage.getItem("theme") || "light";
+root.setAttribute("data-theme", saved);
+
+themeToggle.onclick = () => {
+  const next = root.getAttribute("data-theme") === "dark" ? "light" : "dark";
+  root.setAttribute("data-theme", next);
+  localStorage.setItem("theme", next);
 };
-root.setAttribute("data-theme",localStorage.getItem("theme")||"light");
