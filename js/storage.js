@@ -4,9 +4,12 @@ import { demoUsers } from "./demoUsers.js";
 const KEY = "dashboard-users";
 
 export function loadUsers() {
-  const data = localStorage.getItem(KEY);
-  if (data) users.push(...JSON.parse(data));
-  else { users.push(...demoUsers); saveUsers(); }
+  const saved = localStorage.getItem(KEY);
+  if (saved) users.push(...JSON.parse(saved));
+  else {
+    users.push(...demoUsers);
+    saveUsers();
+  }
 }
 
 export function saveUsers() {
