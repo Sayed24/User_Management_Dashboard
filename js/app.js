@@ -1,15 +1,17 @@
+import { initAuth } from "./auth.js";
 import { loadUsers } from "./storage.js";
 import { renderUsers } from "./ui.js";
-import { initAuth } from "./auth.js";
-import { initSidebar } from "./sidebar.js";
-import { initExport } from "./export.js";
 import "./form.js";
 import "./search.js";
 import "./theme.js";
 
-initAuth();
-initSidebar();
-initExport();
+document.addEventListener("DOMContentLoaded", () => {
+  initAuth();
+  loadUsers();
+  renderUsers();
 
-loadUsers();
-renderUsers();
+  logoLink.onclick = e => {
+    e.preventDefault();
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+});
