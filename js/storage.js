@@ -1,17 +1,13 @@
-import { users } from "./state.js";
-import { demoUsers } from "./demoUsers.js";
+import { setUsers } from "./state.js";
 
-const KEY = "users-dashboard";
+const KEY = "users";
 
-export function loadUsers(){
-  const saved = localStorage.getItem(KEY);
-  if(saved) users.push(...JSON.parse(saved));
-  else {
-    users.push(...demoUsers);
-    saveUsers();
-  }
+export function loadUsers() {
+  const data = JSON.parse(localStorage.getItem(KEY)) || [];
+  setUsers(data);
+  return data;
 }
 
-export function saveUsers(){
+export function saveUsers(users) {
   localStorage.setItem(KEY, JSON.stringify(users));
 }
