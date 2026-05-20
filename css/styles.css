@@ -61,7 +61,7 @@ body {
   background: var(--surface);
   padding: 1rem;
   border-radius: var(--radius);
-  width: 280px;
+  width: 100%;
 }
 
 .form-section input,
