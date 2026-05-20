@@ -52,7 +52,7 @@ body {
 /* LAYOUT */
 .container {
   padding: 1rem;
-  display: flex;
+  /* display: flex; */
   gap: 1rem;
   flex-wrap: wrap;
 }
