@@ -1,74 +1,510 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>User Management Dashboard</title>
-
+  <meta name="description" content="Modern frontend-only user management dashboard built with HTML, CSS and Vanilla JavaScript." />
+  <meta name="theme-color" content="#5b5cf0" />
+  <title>UserFlow — User Management Dashboard</title>
   <link rel="stylesheet" href="css/variables.css" />
   <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
+  <a class="skip-link" href="#mainContent">Skip to content</a>
 
-<!-- LOGIN SCREEN -->
-<section id="loginScreen" class="login-screen">
-  <div class="login-card">
-    <h2>User Dashboard Login</h2>
-
-    <input id="loginName" type="text" placeholder="Username" />
-    <select id="loginRole">
-      <option value="user">User</option>
-      <option value="admin">Admin</option>
-    </select>
-
-    <button id="loginBtn" type="button">Login</button>
-  </div>
-</section>
-
-<!-- APP -->
-<div id="app" class="hidden">
-
-  <!-- HEADER -->
-  <header class="header">
-    <h1 class="logo">
-      <a href="#" id="logoLink">User Dashboard</a>
-    </h1>
-
-    <div class="header-actions">
-      <input id="searchInput" type="text" placeholder="Search users..." />
-      <button id="themeToggle">🌙</button>
-      <button id="logoutBtn">Logout</button>
+  <!-- LOGIN -->
+  <section id="loginScreen" class="login-screen" aria-labelledby="loginTitle">
+    <div class="login-visual" aria-hidden="true">
+      <div class="orb orb-one"></div>
+      <div class="orb orb-two"></div>
+      <div class="login-hero">
+        <div class="brand-mark large">UF</div>
+        <p class="eyebrow">USER MANAGEMENT</p>
+        <h1>Manage people with clarity.</h1>
+        <p>A polished, responsive dashboard for users, roles, activity, and team insights — powered entirely in your browser.</p>
+        <div class="hero-metrics">
+          <span><strong>100%</strong> Frontend</span>
+          <span><strong>0</strong> Backend required</span>
+          <span><strong>24/7</strong> Local access</span>
+        </div>
+      </div>
     </div>
-  </header>
 
-  <!-- MAIN -->
-  <main class="container">
+    <div class="login-panel">
+      <form id="loginForm" class="login-card" novalidate>
+        <div class="mobile-brand">
+          <div class="brand-mark">UF</div>
+          <strong>UserFlow</strong>
+        </div>
+        <div>
+          <p class="eyebrow">WELCOME BACK</p>
+          <h2 id="loginTitle">Sign in to your dashboard</h2>
+          <p class="muted">Choose a display name and role. This demo stores session data only in your browser.</p>
+        </div>
 
-    <!-- FORM -->
-    <section class="form-section">
-      <h2>Add User</h2>
+        <label class="field">
+          <span>Display name</span>
+          <input id="loginName" type="text" maxlength="40" autocomplete="name" placeholder="e.g. Sayed" required />
+          <small class="field-error" id="loginNameError"></small>
+        </label>
 
-      <form id="userForm">
-        <input id="firstName" placeholder="First Name" required />
-        <input id="lastName" placeholder="Last Name" required />
-        <input id="email" type="email" placeholder="Email" required />
-        <input id="phone" placeholder="Phone" />
-        <input id="city" placeholder="City" />
-        <input id="image" placeholder="Image URL" />
+        <label class="field">
+          <span>Access role</span>
+          <select id="loginRole">
+            <option value="admin">Administrator</option>
+            <option value="manager">Manager</option>
+            <option value="viewer">Viewer</option>
+          </select>
+        </label>
 
-        <button type="submit">Add User</button>
+        <button class="btn btn-primary btn-lg" type="submit">
+          Enter dashboard
+          <span aria-hidden="true">→</span>
+        </button>
+
+        <div class="login-note">
+          <span aria-hidden="true">🔒</span>
+          <span>No password or personal data is sent anywhere.</span>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- APP -->
+  <div id="app" class="app hidden">
+    <div id="sidebarBackdrop" class="sidebar-backdrop" hidden></div>
+
+    <aside id="sidebar" class="sidebar" aria-label="Primary navigation">
+      <div class="sidebar-top">
+        <a href="#" id="logoLink" class="brand" aria-label="UserFlow dashboard home">
+          <div class="brand-mark">UF</div>
+          <div>
+            <strong>UserFlow</strong>
+            <span>Admin Console</span>
+          </div>
+        </a>
+
+        <nav class="nav-list">
+          <button class="nav-item active" data-view="dashboard" type="button">
+            <span class="nav-icon" aria-hidden="true">⌂</span><span>Overview</span>
+          </button>
+          <button class="nav-item" data-view="users" type="button">
+            <span class="nav-icon" aria-hidden="true">👥</span><span>Users</span>
+            <span id="usersNavCount" class="nav-badge">0</span>
+          </button>
+          <button class="nav-item" data-view="activity" type="button">
+            <span class="nav-icon" aria-hidden="true">↗</span><span>Activity</span>
+          </button>
+          <button class="nav-item" data-view="settings" type="button">
+            <span class="nav-icon" aria-hidden="true">⚙</span><span>Settings</span>
+          </button>
+        </nav>
+      </div>
+
+      <div class="sidebar-bottom">
+        <div class="storage-card">
+          <div class="storage-icon">☁</div>
+          <div>
+            <strong>Local workspace</strong>
+            <span>Data saved in this browser</span>
+          </div>
+        </div>
+        <button id="logoutBtn" class="nav-item logout-btn" type="button">
+          <span class="nav-icon" aria-hidden="true">↪</span><span>Sign out</span>
+        </button>
+      </div>
+    </aside>
+
+    <div class="app-main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button id="menuBtn" class="icon-btn menu-btn" type="button" aria-label="Open navigation" aria-expanded="false">☰</button>
+          <div>
+            <p id="pageEyebrow" class="eyebrow">WORKSPACE</p>
+            <h1 id="pageTitle">Overview</h1>
+          </div>
+        </div>
+
+        <div class="topbar-actions">
+          <button id="globalSearchBtn" class="search-trigger" type="button" aria-label="Go to users and search">
+            <span aria-hidden="true">⌕</span>
+            <span class="search-trigger-text">Search users</span>
+            <kbd>/</kbd>
+          </button>
+          <button id="themeToggle" class="icon-btn" type="button" aria-label="Switch theme">
+            <span id="themeIcon" aria-hidden="true">☾</span>
+          </button>
+          <div class="profile-wrap">
+            <button id="profileBtn" class="profile-btn" type="button" aria-expanded="false">
+              <span id="profileAvatar" class="avatar avatar-sm">A</span>
+              <span class="profile-copy">
+                <strong id="profileName">Admin</strong>
+                <small id="profileRole">Administrator</small>
+              </span>
+              <span aria-hidden="true">⌄</span>
+            </button>
+            <div id="profileMenu" class="profile-menu" hidden>
+              <button id="profileSettingsBtn" type="button">Settings</button>
+              <button id="profileLogoutBtn" type="button">Sign out</button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main id="mainContent" class="main-content" tabindex="-1">
+        <!-- OVERVIEW -->
+        <section class="view active" data-view-panel="dashboard">
+          <div class="hero-row">
+            <div>
+              <p class="eyebrow">TEAM SNAPSHOT</p>
+              <h2 id="welcomeHeading">Good morning.</h2>
+              <p class="muted">Here’s what is happening across your user directory.</p>
+            </div>
+            <button id="addUserBtnTop" class="btn btn-primary admin-control" type="button">
+              <span aria-hidden="true">＋</span> Add user
+            </button>
+          </div>
+
+          <section class="stats-grid" aria-label="User statistics">
+            <article class="stat-card">
+              <div class="stat-icon stat-purple">👥</div>
+              <div class="stat-card-copy">
+                <span>Total users</span>
+                <strong id="statTotal">0</strong>
+                <small id="statTotalNote">Across all teams</small>
+              </div>
+            </article>
+            <article class="stat-card">
+              <div class="stat-icon stat-green">✓</div>
+              <div class="stat-card-copy">
+                <span>Active users</span>
+                <strong id="statActive">0</strong>
+                <small id="statActiveNote">0% of directory</small>
+              </div>
+            </article>
+            <article class="stat-card">
+              <div class="stat-icon stat-blue">★</div>
+              <div class="stat-card-copy">
+                <span>Administrators</span>
+                <strong id="statAdmins">0</strong>
+                <small>Elevated access</small>
+              </div>
+            </article>
+            <article class="stat-card">
+              <div class="stat-icon stat-orange">◷</div>
+              <div class="stat-card-copy">
+                <span>Added this month</span>
+                <strong id="statNew">0</strong>
+                <small id="statNewNote">Recent growth</small>
+              </div>
+            </article>
+          </section>
+
+          <div class="overview-grid">
+            <section class="panel chart-panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">DISTRIBUTION</p>
+                  <h3>Users by role</h3>
+                </div>
+                <button class="text-btn" data-go-view="users" type="button">View directory →</button>
+              </div>
+              <div id="roleChart" class="role-chart" aria-label="Users by role chart"></div>
+            </section>
+
+            <section class="panel health-panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="eyebrow">DIRECTORY HEALTH</p>
+                  <h3>Account status</h3>
+                </div>
+              </div>
+              <div class="health-wrap">
+                <div id="healthDonut" class="health-donut">
+                  <div class="health-donut-inner">
+                    <strong id="healthPercent">0%</strong>
+                    <span>active</span>
+                  </div>
+                </div>
+                <div class="health-legend">
+                  <span><i class="dot active-dot"></i> Active <strong id="legendActive">0</strong></span>
+                  <span><i class="dot pending-dot"></i> Pending <strong id="legendPending">0</strong></span>
+                  <span><i class="dot inactive-dot"></i> Inactive <strong id="legendInactive">0</strong></span>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <section class="panel recent-panel">
+            <div class="panel-heading">
+              <div>
+                <p class="eyebrow">RECENT USERS</p>
+                <h3>Latest additions</h3>
+              </div>
+              <button class="text-btn" data-go-view="users" type="button">See all users →</button>
+            </div>
+            <div id="recentUsers" class="recent-users"></div>
+          </section>
+        </section>
+
+        <!-- USERS -->
+        <section class="view" data-view-panel="users">
+          <div class="hero-row users-hero">
+            <div>
+              <p class="eyebrow">DIRECTORY</p>
+              <h2>Users</h2>
+              <p class="muted">Search, filter, edit, and manage everyone in your workspace.</p>
+            </div>
+            <div class="hero-actions">
+              <button id="exportBtn" class="btn btn-secondary" type="button">⇩ Export</button>
+              <button id="addUserBtn" class="btn btn-primary admin-control" type="button">＋ Add user</button>
+            </div>
+          </div>
+
+          <section class="panel directory-panel">
+            <div class="directory-toolbar">
+              <label class="search-box">
+                <span aria-hidden="true">⌕</span>
+                <input id="searchInput" type="search" placeholder="Search name, email, city, department..." autocomplete="off" />
+                <kbd>/</kbd>
+              </label>
+
+              <div class="filters">
+                <label>
+                  <span class="sr-only">Filter by role</span>
+                  <select id="roleFilter">
+                    <option value="all">All roles</option>
+                    <option value="Admin">Admin</option>
+                    <option value="Manager">Manager</option>
+                    <option value="Member">Member</option>
+                  </select>
+                </label>
+                <label>
+                  <span class="sr-only">Filter by status</span>
+                  <select id="statusFilter">
+                    <option value="all">All status</option>
+                    <option value="Active">Active</option>
+                    <option value="Pending">Pending</option>
+                    <option value="Inactive">Inactive</option>
+                  </select>
+                </label>
+                <label>
+                  <span class="sr-only">Sort users</span>
+                  <select id="sortSelect">
+                    <option value="newest">Newest first</option>
+                    <option value="name-asc">Name A–Z</option>
+                    <option value="name-desc">Name Z–A</option>
+                    <option value="oldest">Oldest first</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+
+            <div class="directory-meta">
+              <p><strong id="resultCount">0</strong> users found</p>
+              <div class="view-toggle" role="group" aria-label="Directory view">
+                <button id="tableViewBtn" class="active" type="button" aria-label="Table view">☷</button>
+                <button id="cardViewBtn" type="button" aria-label="Card view">▦</button>
+              </div>
+            </div>
+
+            <div id="usersTableWrap" class="table-wrap">
+              <table class="users-table">
+                <thead>
+                  <tr>
+                    <th>User</th>
+                    <th>Role</th>
+                    <th>Department</th>
+                    <th>Status</th>
+                    <th>Location</th>
+                    <th>Joined</th>
+                    <th><span class="sr-only">Actions</span></th>
+                  </tr>
+                </thead>
+                <tbody id="usersTableBody"></tbody>
+              </table>
+            </div>
+
+            <div id="usersGrid" class="users-grid hidden"></div>
+
+            <div id="emptyState" class="empty-state hidden">
+              <div class="empty-icon">⌕</div>
+              <h3>No users found</h3>
+              <p>Try changing your search or filters.</p>
+              <button id="clearFiltersBtn" class="btn btn-secondary" type="button">Clear filters</button>
+            </div>
+
+            <footer id="pagination" class="pagination"></footer>
+          </section>
+        </section>
+
+        <!-- ACTIVITY -->
+        <section class="view" data-view-panel="activity">
+          <div class="hero-row">
+            <div>
+              <p class="eyebrow">AUDIT TRAIL</p>
+              <h2>Activity</h2>
+              <p class="muted">Recent changes made in this browser session.</p>
+            </div>
+            <button id="clearActivityBtn" class="btn btn-secondary admin-control" type="button">Clear activity</button>
+          </div>
+          <section class="panel activity-panel">
+            <div id="activityList" class="activity-list"></div>
+          </section>
+        </section>
+
+        <!-- SETTINGS -->
+        <section class="view" data-view-panel="settings">
+          <div class="hero-row">
+            <div>
+              <p class="eyebrow">PREFERENCES</p>
+              <h2>Settings</h2>
+              <p class="muted">Customize how this local dashboard behaves.</p>
+            </div>
+          </div>
+
+          <div class="settings-grid">
+            <section class="panel settings-card">
+              <div>
+                <h3>Appearance</h3>
+                <p class="muted">Choose the interface theme.</p>
+              </div>
+              <div class="segmented">
+                <button data-theme-choice="light" type="button">☀ Light</button>
+                <button data-theme-choice="dark" type="button">☾ Dark</button>
+                <button data-theme-choice="system" type="button">◐ System</button>
+              </div>
+            </section>
+
+            <section class="panel settings-card">
+              <div>
+                <h3>Directory density</h3>
+                <p class="muted">Control row spacing in the users table.</p>
+              </div>
+              <div class="segmented">
+                <button data-density="comfortable" type="button">Comfortable</button>
+                <button data-density="compact" type="button">Compact</button>
+              </div>
+            </section>
+
+            <section class="panel settings-card">
+              <div>
+                <h3>Demo data</h3>
+                <p class="muted">Restore the original sample directory.</p>
+              </div>
+              <button id="resetDemoBtn" class="btn btn-secondary admin-control" type="button">Restore demo users</button>
+            </section>
+
+            <section class="panel settings-card danger-card">
+              <div>
+                <h3>Local data</h3>
+                <p class="muted">Delete all users and activity stored in this browser.</p>
+              </div>
+              <button id="clearDataBtn" class="btn btn-danger admin-control" type="button">Clear local data</button>
+            </section>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- USER MODAL -->
+  <div id="userModal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop" data-close-modal></div>
+    <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="userModalTitle">
+      <header class="modal-header">
+        <div>
+          <p class="eyebrow">USER PROFILE</p>
+          <h2 id="userModalTitle">Add user</h2>
+        </div>
+        <button class="icon-btn" type="button" data-close-modal aria-label="Close modal">×</button>
+      </header>
+
+      <form id="userForm" class="user-form" novalidate>
+        <input id="userId" type="hidden" />
+        <div class="form-grid">
+          <label class="field">
+            <span>First name *</span>
+            <input id="firstName" maxlength="40" required />
+            <small class="field-error" data-error-for="firstName"></small>
+          </label>
+          <label class="field">
+            <span>Last name *</span>
+            <input id="lastName" maxlength="40" required />
+            <small class="field-error" data-error-for="lastName"></small>
+          </label>
+          <label class="field field-full">
+            <span>Email address *</span>
+            <input id="email" type="email" maxlength="100" required />
+            <small class="field-error" data-error-for="email"></small>
+          </label>
+          <label class="field">
+            <span>Role</span>
+            <select id="role">
+              <option>Member</option>
+              <option>Manager</option>
+              <option>Admin</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Status</span>
+            <select id="status">
+              <option>Active</option>
+              <option>Pending</option>
+              <option>Inactive</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Department</span>
+            <input id="department" maxlength="50" placeholder="e.g. Engineering" />
+          </label>
+          <label class="field">
+            <span>City</span>
+            <input id="city" maxlength="60" placeholder="e.g. Sacramento" />
+          </label>
+          <label class="field">
+            <span>Phone</span>
+            <input id="phone" type="tel" maxlength="30" placeholder="+1 555 123 4567" />
+          </label>
+          <label class="field">
+            <span>Avatar URL</span>
+            <input id="image" type="url" maxlength="500" placeholder="https://..." />
+          </label>
+        </div>
+
+        <footer class="modal-footer">
+          <button class="btn btn-secondary" type="button" data-close-modal>Cancel</button>
+          <button id="saveUserBtn" class="btn btn-primary" type="submit">Save user</button>
+        </footer>
       </form>
     </section>
+  </div>
 
-    <!-- USERS -->
-    <section class="users-section">
-      <h2>Users</h2>
-      <div id="usersGrid" class="users-grid"></div>
+  <!-- DETAILS DRAWER -->
+  <div id="detailsDrawer" class="drawer" aria-hidden="true">
+    <div class="drawer-backdrop" data-close-drawer></div>
+    <aside class="drawer-panel" aria-label="User details">
+      <button class="icon-btn drawer-close" type="button" data-close-drawer aria-label="Close details">×</button>
+      <div id="drawerContent"></div>
+    </aside>
+  </div>
+
+  <!-- CONFIRM -->
+  <div id="confirmModal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop"></div>
+    <section class="confirm-card" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle">
+      <div class="confirm-icon">!</div>
+      <h2 id="confirmTitle">Delete user?</h2>
+      <p id="confirmMessage">This action cannot be undone.</p>
+      <div class="confirm-actions">
+        <button id="confirmCancel" class="btn btn-secondary" type="button">Cancel</button>
+        <button id="confirmAction" class="btn btn-danger" type="button">Delete</button>
+      </div>
     </section>
+  </div>
 
-  </main>
-</div>
+  <div id="toastRegion" class="toast-region" aria-live="polite" aria-atomic="true"></div>
 
-<script type="module" src="js/app.js"></script>
+  <script type="module" src="js/app.js"></script>
 </body>
 </html>

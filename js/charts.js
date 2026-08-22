@@ -1,22 +1,19 @@
-import { users } from "./state.js";
+export function renderRoleChart(users) {
+  const target = document.getElementById("roleChart");
+  const roles = ["Admin", "Manager", "Member"];
+  const counts = roles.map((role) => ({
+    role,
+    count: users.filter((user) => user.role === role).length
+  }));
+  const max = Math.max(1, ...counts.map((item) => item.count));
 
-export function renderChart(){
-  const c=usersChart;
-  const ctx=c.getContext("2d");
-  ctx.clearRect(0,0,c.width,c.height);
-
-  const map={};
-  users.forEach(u=>map[u.city]=(map[u.city]||0)+1);
-
-  const keys=Object.keys(map);
-  const max=Math.max(...Object.values(map));
-  const w=c.width/keys.length;
-
-  keys.forEach((k,i)=>{
-    const h=(map[k]/max)*100;
-    ctx.fillStyle="#2563eb";
-    ctx.fillRect(i*w,120-h,w-10,h);
-    ctx.fillStyle="#000";
-    ctx.fillText(k,i*w+5,135);
-  });
+  target.innerHTML = counts.map(({ role, count }) => `
+    <div class="role-row">
+      <span class="role-row-label">${role}</span>
+      <div class="role-track" aria-hidden="true">
+        <div class="role-bar" style="width:${Math.max(count ? 8 : 0, (count / max) * 100)}%"></div>
+      </div>
+      <strong class="role-value">${count}</strong>
+    </div>
+  `).join("");
 }
